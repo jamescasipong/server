@@ -37,10 +37,10 @@ const XD = (isLocal) => {
   }
 }
 
-connectDB(XD());
+connectDB(XD);
 
 
-const PORT = 5000;
+const PORT = 3002;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
