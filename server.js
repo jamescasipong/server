@@ -6,7 +6,7 @@ const dataModel = require("./routes/dataRoute.js"); // Use require for imports
 
 const app = express();
 
-const allowedOrigin = 'https://task-tracker-psi-ten.vercel.app';
+const allowedOrigin = 'https://monitoring-task.vercel.app';
 
 // Use CORS middleware with specific options
 app.use(cors({
