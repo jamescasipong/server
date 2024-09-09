@@ -13,7 +13,7 @@ const allowedOrigins = "http://localhost:5173";
 // Use CORS middleware with specific options
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: allowedOrigins,
     credentials: true, // Allow credentials
   })
 );

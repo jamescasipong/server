@@ -1,4 +1,3 @@
-// models/payment.js
 const mongoose = require("mongoose");
 
 const RowSchema = new mongoose.Schema({
@@ -6,8 +5,13 @@ const RowSchema = new mongoose.Schema({
   values: [String],
 });
 
-const PaymentSchema = new mongoose.Schema({
+const PaymentTableSchema = new mongoose.Schema({
+  name: String,
   rows: [RowSchema],
+});
+
+const PaymentSchema = new mongoose.Schema({
+  tables: [PaymentTableSchema],
 });
 
 module.exports = mongoose.model("Payment", PaymentSchema);

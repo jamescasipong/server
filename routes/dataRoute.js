@@ -62,7 +62,7 @@
     try {
       const jsonData = req.body;
   
-      // Check if jsonData is an array
+      // Check if jsonData is an array, otherwise return 404.
       if (!Array.isArray(jsonData)) {
         return res.status(400).send('Invalid data format: expected an array.');
       }

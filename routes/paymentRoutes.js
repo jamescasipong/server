@@ -1,4 +1,3 @@
-// routes/paymentRoutes.js
 const express = require("express");
 const Payment = require("../models/payment.js");
 
@@ -9,7 +8,7 @@ router.post("/save", async (req, res) => {
   try {
     // Clear existing data and save new data
     await Payment.deleteMany({});
-    await Payment.create({ rows: req.body.rows });
+    await Payment.create({ tables: req.body.tables });
     res.status(201).json({ message: "Payment data saved successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error saving payment data", error });
