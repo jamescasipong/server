@@ -7,36 +7,24 @@ const paymentRoutes = require("./routes/paymentRoutes.js");
 
 const app = express();
 
-<<<<<<< Updated upstream
-const allowedOrigin = "https://monitoring-task.vercel.app";
-const allowedOrigins = "http://localhost:5173";
 
-// Use CORS middleware with specific options
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true, // Allow credentials
-  })
-);
-=======
 const allowedOrigin = 'https://monitoring-task.vercel.app';
 const allowedOrigins = 'http://localhost:5173';
 
 
 // Use CORS middleware with specific options
 app.use(cors({
-  origin: allowedOrigins,
+  origin: allowedOrigin,
   credentials: true,  // Allow credentials
 }));
 
->>>>>>> Stashed changes
 
 app.use(bodyParser.json());
 app.use("/api/payments", paymentRoutes);
 app.use("/", dataModel);
 
 const connectDB = async (callback) => {
-  const isLocal = true;
+  const isLocal = false;
   try {
     /*await mongoose.connect("mongodb+srv://jamesxcasipong:!Unravel12345@cluster0.yqpkrko.mongodb.net/NODE-API?retryWrites=true&w=majority&appName=Cluster0");*/
     isLocal
