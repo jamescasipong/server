@@ -52,7 +52,7 @@ const AddressSchema = new mongoose.Schema({
     unique: false,
   },
 }, 
-{ collection: 'taskdata' }); // Explicitly set the collection name
+{ collection: 'taskdata', }); // Explicitly set the collection name
 
 const Address = mongoose.model('Address', AddressSchema);   
 

@@ -18,29 +18,18 @@
 
   router.get('/export/excel', async (req, res) => {
     try {
-      // Fetch data from the database
-      const data = await Address.find({}).lean();
+      // Fetch data from the database, excluding _id and __v fields
+      const data = await Address.find({}, { _id: 0, __v: 0 }).lean(); // Proper projection
   
-      // Convert data to worksheet
-      const worksheet = XLSX.utils.json_to_sheet(data);
-  
-      // Create a new workbook and append the worksheet
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-  
-      // Write workbook to a buffer
-      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-  
-      // Send the file to the client
-      res.setHeader('Content-Disposition', 'attachment; filename=data.xlsx');
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.send(buffer);
+      // Send data as JSON
+      console.log(data);
+
+      res.json(data);
     } catch (error) {
-      res.status(500).send('Failed to export data: ' + error.message);
+      res.status(500).send('Failed to fetch data: ' + error.message);
     }
   });
-
-
+  
   router.delete("/", async (req, res)=>{
 
       try {
