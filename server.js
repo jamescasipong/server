@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const dataRoute = require("./routes/dataRoute.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
 const { generateApiKey } = require('generate-api-key');
+const payment = require("./models/payment.js");
 require('dotenv').config()
  
 
@@ -37,6 +38,39 @@ app.use((req, res, next) => {
   });
   
   next();
+});
+
+app.use(`/api/payments`,  paymentRoutes);
+
+app.use(`/api/dataRoute`, dataRoute);
+
+const connectDB = async (callback) => {
+  const isLocal = false;
+  try {
+    isLocal
+      ? await mongoose.connect("mongodb://localhost:27017/SysTracker")
+      : await mongoose.connect(process.env.MONGO_URI);
+
+    callback(isLocal);
+    console.log("MongoDB connected successfully.");
+  } catch (err) {
+    console.log("Database connection error:", err);
+  }
+};
+
+const checkIsLocal = (isLocal) => {
+  if (!isLocal) {
+    console.log("You are working in a production!");
+  } else {
+    console.log("Working on a local");
+  }
+};
+
+connectDB(checkIsLocal);
+
+const PORT = 3002;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 
@@ -72,39 +106,3 @@ app.use('/api/payments', (req, res, next) => {
   }
   next();
 }, paymentRoutes);*/
-
-
-
-
-app.use(`/api/payments`, paymentRoutes);
-
-app.use(`/api/dataRoute`, dataRoute);
-
-const connectDB = async (callback) => {
-  const isLocal = false;
-  try {
-    isLocal
-      ? await mongoose.connect("mongodb://localhost:27017/wSysTracker")
-      : await mongoose.connect(process.env.MONGO_URI);
-
-    callback(isLocal);
-    console.log("MongoDB connected successfully.");
-  } catch (err) {
-    console.log("Database connection error:", err);
-  }
-};
-
-const checkIsLocal = (isLocal) => {
-  if (!isLocal) {
-    console.log("You are working in a production!");
-  } else {
-    console.log("Working on a local");
-  }
-};
-
-connectDB(checkIsLocal);
-
-const PORT = 3002;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
