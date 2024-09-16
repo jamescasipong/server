@@ -2,13 +2,17 @@
   const Address = require("../models/dataModel");
   const router = express.Router();
   const XLSX = require('xlsx');
+  const { Error } = require("mongoose");
 
+
+
+  //Route for "/" path with bunch of middlewares
 
   router.get("/", async (req, res) => {
-
-      
     try {
-      const user = await Address.find({});
+
+      const user = await Address.find({})
+      
       res.json(user);
     } catch (err) {
       console.log("err: ", err);

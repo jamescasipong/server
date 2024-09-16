@@ -2,45 +2,63 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const dataModel = require("./routes/dataRoute.js"); // Use require for imports
+const dataRoute = require("./routes/dataRoute.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
+const { generateApiKey } = require('generate-api-key');
+require('dotenv').config()
+ 
+
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:5173', 'https://monitoring-task.vercel.app'];
 
-const allowedOrigin = 'https://monitoring-task.vercel.app';
-const allowedOrigins = 'http://localhost:5173';
-
-
-// Use CORS middleware with specific options
 app.use(cors({
-  origin: allowedOrigin,
-  credentials: true,  // Allow credentials
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 
-
 app.use(bodyParser.json());
-app.use("/api/payments", paymentRoutes);
-app.use("/", dataModel);
+
+app.use((req, res, next) => {
+  const startTime = Date.now();
+
+
+  // Listen for the response to finish
+  res.on('finish', () => {
+    const duration = Date.now() - startTime;
+    console.log(`Request: ${req.method} ${req.url} took ${duration}ms`);
+  });
+  
+  next();
+});
+
+
+app.use(`/api/${process.env.API_KEY}/payments`, paymentRoutes);
+
+app.use(`/api/${process.env.API_KEY}/dataRoute`, dataRoute);
 
 const connectDB = async (callback) => {
-  const isLocal = false  ;
+  const isLocal = false;
   try {
-    /*await mongoose.connect("mongodb+srv://jamesxcasipong:!Unravel12345@cluster0.yqpkrko.mongodb.net/NODE-API?retryWrites=true&w=majority&appName=Cluster0");*/
     isLocal
-      ? await mongoose.connect("mongodb://localhost:27017/SysTracker")
-      : await mongoose.connect(
-          "mongodb+srv://jamesxcasipong:!Unravel12345@cluster0.yqpkrko.mongodb.net/NODE-API?retryWrites=true&w=majority&appName=Cluster0"
-        );
+      ? await mongoose.connect("mongodb://localhost:27017/wSysTracker")
+      : await mongoose.connect(process.env.MONGO_URI);
 
-    if (!isLocal) callback(isLocal);
+    callback(isLocal);
     console.log("MongoDB connected successfully.");
   } catch (err) {
     console.log("Database connection error:", err);
   }
 };
 
-const XD = (isLocal) => {
+const checkIsLocal = (isLocal) => {
   if (!isLocal) {
     console.log("You are working in a production!");
   } else {
@@ -48,7 +66,7 @@ const XD = (isLocal) => {
   }
 };
 
-connectDB(XD);
+connectDB(checkIsLocal);
 
 const PORT = 3002;
 app.listen(PORT, () => {
