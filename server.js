@@ -40,9 +40,45 @@ app.use((req, res, next) => {
 });
 
 
-app.use(`/api/${process.env.API_KEY}/payments`, paymentRoutes);
+/*app.use((req, res, next) => {
+  // Assume `apiKeys` is stored in environment variables or similar
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    return res.status(500).send('API key is not configured.');
+  }
 
-app.use(`/api/${process.env.API_KEY}/dataRoute`, dataRoute);
+  // Set the API key in the headers for the downstream service
+  req.headers['Authorization'] = `Bearer ${apiKey}`;
+  next();
+});
+
+
+app.use((req, res, next) => {
+  // Assume `apiKeys` is stored in environment variables or similar
+  
+  if (!apiKey) {
+    return res.status(500).send('API key is not configured.');
+  }
+
+  // Set the API key in the headers for the downstream service
+  req.headers['Authorization'] = `Bearer ${apiKey}`;
+  next();
+});
+
+
+app.use('/api/payments', (req, res, next) => {
+  if (req.headers['authorization'] !== `Bearer ${apiKey}`) {
+    return res.status(403).send('Forbidden');
+  }
+  next();
+}, paymentRoutes);*/
+
+
+
+
+app.use(`/api/payments`, paymentRoutes);
+
+app.use(`/api/dataRoute`, dataRoute);
 
 const connectDB = async (callback) => {
   const isLocal = false;
