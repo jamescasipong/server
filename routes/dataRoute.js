@@ -100,6 +100,7 @@
     try {
       const { id } = req.params;
       const updatedData = req.body;
+      console.log(updatedData)
       const device = await Address.findByIdAndUpdate(id, updatedData, { new: true });
       if (!device) {
         return res.status(404).json({ message: 'Device not found' });
