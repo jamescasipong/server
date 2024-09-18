@@ -100,12 +100,14 @@
     try {
       const { id } = req.params;
       const updatedData = req.body;
-      console.log(updatedData)
+      console.log("updatedData", updatedData)
       const device = await Address.findByIdAndUpdate(id, updatedData, { new: true });
       if (!device) {
         return res.status(404).json({ message: 'Device not found' });
       }
       res.json(device);
+
+      console.log("device", device);
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
     }
