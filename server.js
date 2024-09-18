@@ -8,6 +8,7 @@ const { generateApiKey } = require('generate-api-key');
 const payment = require("./models/payment.js");
 require('dotenv').config()
  
+const isLocal = false;
 
 
 const app = express();
@@ -45,7 +46,7 @@ app.use(`/api/payments`,  paymentRoutes);
 app.use(`/api/dataRoute`, dataRoute);
 
 const connectDB = async (callback) => {
-  const isLocal = false;
+
   try {
     isLocal
       ? await mongoose.connect("mongodb://localhost:27017/SysTracker")
