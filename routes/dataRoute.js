@@ -35,7 +35,7 @@ router.get('/ip', (req, res) => {
   const isIPv4 = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
   if (isIPv4.test(ip)) {
-      res.send(`Your IPv4 address is: ${ip}`);
+      res.json({ ip });
   } else {
       res.send(`Could not determine an IPv4 address. Detected IP: ${ip}`);
   }
