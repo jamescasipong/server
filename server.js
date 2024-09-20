@@ -15,6 +15,21 @@ const app = express();
 
 const allowedOrigins = ['http://localhost:5173', 'https://monitoring-task.vercel.app'];
 
+app.get('/api/ip', (req, res) => {
+  // Check cookies first
+  const userIp = req.cookies.userIp;
+
+  if (userIp) {
+      return res.json({ ip: userIp });
+  }
+
+  // Fallback to get the real IP from the request
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  res.cookie('userIp', ip, { maxAge: 900000, httpOnly: true });
+  res.json({ ip });
+});
+
+
 app.use(cors({
   origin: function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
