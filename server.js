@@ -21,28 +21,6 @@ const requestIp = require('request-ip');
 // Middleware to extract client IP
 app.use(requestIp.mw());
 
-app.get('/api/ip', (req, res) => {
-    let ip = req.clientIp;
-
-    // Check if the IP is IPv6 and adjust if necessary
-    if (ip.includes(':')) {
-        const forwardedIps = req.headers['x-forwarded-for'];
-        if (forwardedIps) {
-            // Take the first IP from the forwarded list
-            ip = forwardedIps.split(',')[0];
-        }
-    }
-
-    // Regex to validate IPv4
-    const isIPv4 = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-
-    if (isIPv4.test(ip)) {
-        res.send(`Your IPv4 address is: ${ip}`);
-    } else {
-        res.send(`Could not determine an IPv4 address. Detected IP: ${ip}`);
-    }
-});
-
 app.use(cors({
   origin: function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
