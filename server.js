@@ -21,6 +21,8 @@ const requestIp = require('request-ip');
 // Middleware to extract client IP
 app.use(requestIp.mw());
 
+
+
 app.use(cors({
   origin: function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
