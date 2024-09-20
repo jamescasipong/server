@@ -19,7 +19,6 @@ const requestIp = require('request-ip');
 
 
 // Middleware to extract client IP
-app.use(requestIp.mw());
 
 
 
@@ -32,6 +31,10 @@ app.use(cors({
     }
   },
   credentials: true,}));
+
+
+app.use(requestIp.mw())
+
 
 
 app.use(bodyParser.json());

@@ -2,6 +2,8 @@ const express = require("express");
 const Address = require("../models/dataModel");
 const router = express.Router();
 const XLSX = require("xlsx");
+const axios = require("axios")
+
 const { Error } = require("mongoose");
 
 //Route for "/" path with bunch of middlewares
@@ -31,13 +33,23 @@ router.get('/ip', (req, res) => {
       }
   }
 
+  router.get('/ip/:ip', async (req, res) => {
+    try {
+        const response = await axios.get(`http://ip-api.com/json/${req.params.ip}`);
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+  });
+
   // Regex to validate IPv4
   const isIPv4 = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
   if (isIPv4.test(ip)) {
+      console.log(ip)
       res.json({ ip });
   } else {
-      res.send(`Could not determine an IPv4 address. Detected IP: ${ip}`);
+      res.send({"ip": ip});
   }
 });
 
