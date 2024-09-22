@@ -64,6 +64,10 @@ router.delete("/delete", async (req, res) => {
     for (let i = 0; i < arrayLength; i++) {
       const exist = await Address.findOne(arrayObject[i]);
 
+      if (!exist) {
+        return res.status(404).json({ message: "Couldn't find what you're deleting" });
+      }
+
       await Address.deleteMany(arrayObject[i]);
     }
 
@@ -73,6 +77,7 @@ router.delete("/delete", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 router.get("/export/excel", async (req, res) => {
   try {

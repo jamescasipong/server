@@ -7,7 +7,8 @@ const paymentRoutes = require("./routes/paymentRoutes.js");
 const { generateApiKey } = require('generate-api-key');
 const payment = require("./models/payment.js");
 require('dotenv').config()
- 
+const path = require('path');
+
 const isLocal = false;
 
 
@@ -19,6 +20,9 @@ const requestIp = require('request-ip');
 
 
 // Middleware to extract client IP
+
+// Catch-all route for undefined routes
+
 
 
 
@@ -34,6 +38,10 @@ app.use(cors({
 
 
 app.use(requestIp.mw())
+
+
+
+
 
 
 
@@ -55,6 +63,13 @@ app.use((req, res, next) => {
 app.use(`/api/payments`,  paymentRoutes);
 
 app.use(`/api/dataRoute`, dataRoute);
+
+app.use((req, res, next) => {
+  res.status(404);
+
+  next();
+})
+
 
 const connectDB = async (callback) => {
 
