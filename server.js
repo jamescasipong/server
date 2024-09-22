@@ -67,7 +67,8 @@ const allowedIPs = ['124.83.41.231', '152.32.99.73'];
 app.use((req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   if (!allowedIPs.includes(ip)) {
-    return res.status(403).send('Access denied');
+    console.log()
+    return res.status(403).send(ip);
   }
   next();
 });
