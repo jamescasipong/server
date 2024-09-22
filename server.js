@@ -72,7 +72,11 @@ app.use(`/api/payments`, paymentRoutes);
 
 app.use(`/api/dataRoute`, dataRoute);
 
+app.use((req, res, next) => {
+  res.status(404);
 
+  next();
+});
 
 const connectDB = async (callback) => {
   try {
