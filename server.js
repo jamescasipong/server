@@ -53,16 +53,6 @@ app.use((req, res, next) => {
   next();
 });
 
-const allowedIPs = ["124.83.41.231", "152.32.99.73"];
-
-app.use((req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  if (!allowedIPs.includes(ip)) {
-    console.log();
-    return res.status(403).send("Access denied");
-  }
-  next();
-});
 
 app.get("/api/dataRoute/ipsz", (req, res) => {
   res.json({ ip: req.ip });
@@ -71,7 +61,7 @@ app.get("/api/dataRoute/ipsz", (req, res) => {
 app.use(`/api/payments`, paymentRoutes);
 
 app.use(`/api/dataRoute`, dataRoute);
-
+ 
 const connectDB = async (callback) => {
   try {
     isLocal

@@ -82,7 +82,9 @@ router.delete("/delete", async (req, res) => {
 router.get("/export/excel", async (req, res) => {
   try {
     // Fetch data from the database, excluding _id and __v fields
-    const data = await Address.find({}, { _id: 0, __v: 0 }).lean(); // Proper projection
+    const data = await Address.find({}, { _id: 0, __v: 0 }).lean() // Proper projection
+
+
 
     // Send data as JSON
 

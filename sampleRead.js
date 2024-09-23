@@ -17,15 +17,16 @@ fs.readFile('EJP137010123.txt', 'utf8', (err, data) => {
         orNumbers.push(match[1]); // Push the OR No. to the array
     }
 
-    orNumbers.sort()
+    const copyOrNumbers = orNumbers;
+
+    copyOrNumbers.sort();
     
     function findMissingNumbers(array) {
-        let properties = Object.values(array);
-        console.log(properties)
-        let arrayLength = properties.length;
+        let properties = array;
+        let propertiesLength = properties.length;
         const arrayContainer = [];
     
-        for (let i = 0; i < arrayLength - 1; i++) {
+        for (let i = 0; i < propertiesLength - 1; i++) {
             let current = Number(properties[i]);
             let next = Number(properties[i + 1]);
     
@@ -80,7 +81,7 @@ fs.readFile('EJP137010123.txt', 'utf8', (err, data) => {
 
 
     // Find and print missing OR numbers
-    const missingORNumbers = findMissingNumbers(orNumbers);
+    const missingORNumbers = findMissingNumbers(copyOrNumbers);
     if (missingORNumbers.length > 0) {
         console.log('Missing OR No.s:', missingORNumbers);
     } else {
