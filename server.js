@@ -9,6 +9,8 @@ const payment = require("./models/payment.js");
 require("dotenv").config();
 const path = require("path");
 
+
+
 const isLocal = false;
 
 const app = express();
@@ -17,6 +19,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://monitoring-task.vercel.app",
 ];
+const allowedIPs = ['124.83.41.231', '152.32.99.73'];
 
 const requestIp = require("request-ip");
 
@@ -36,6 +39,18 @@ app.use(
     credentials: true,
   })
 );
+
+
+app.use((req, res, next) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (!allowedIPs.includes(ip)) {
+    console.log()
+    return res.status(403).send("Access denied");
+  }
+  next();
+});
+
+
 
 app.use(requestIp.mw());
 
