@@ -19,7 +19,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://monitoring-task.vercel.app",
 ];
-const allowedIPs = [process.env.IP_ADDRESS, process.env.IP_ADDRESS2];
+const allowedIPs = [process.env.IP_ADDRESS, process.env.IP_ADDRESS2, process.env.IP_ADDRESS3];
 
 const requestIp = require("request-ip");
 
@@ -43,7 +43,7 @@ app.use(
 
 app.use((req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (!allowedIPs.includes(ip)) {
+  if (allowedIPs.includes(ip)) {
     console.log()
     return res.status(403).send("Access denied");
   }
