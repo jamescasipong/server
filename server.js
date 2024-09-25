@@ -19,7 +19,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://monitoring-task.vercel.app",
 ];
-const allowedIPs = ['124.83.41.231', '152.32.99.73'];
+const allowedIPs = [process.env.IP_ADDRESS, process.env.IP_ADDRESS2];
 
 const requestIp = require("request-ip");
 
