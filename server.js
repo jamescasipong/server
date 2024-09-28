@@ -40,10 +40,9 @@ app.use(
   })
 );
 
-
 app.use((req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (allowedIPs.includes(ip)) {
+  if (!allowedIPs.includes(ip)) {
     console.log()
     return res.status(403).send("Access denied");
   }
@@ -66,7 +65,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
 
 app.get("/api/dataRoute/ipsz", (req, res) => {
   res.json({ ip: req.ip });
