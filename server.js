@@ -40,15 +40,19 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  const data = ipUsers.findOne({ ip: ip });
-  if (!data) {
-    console.log()
-    return res.status(403).send("Access denied");
+  try {
+    const data = await ipUsers.findOne({ ip: { $in: [ip] } });
+    if (!data) {
+      return res.status(403).send("Access denied");
+    }
+    next();
+  } catch (err) {
+    console.error("Error checking IP:", err);
+    res.status(500).send("Internal server error");
   }
-  next();
 });
 
 /*app.use(async (req, res, next) => {
