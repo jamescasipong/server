@@ -9,7 +9,6 @@ const payment = require("./models/payment.js");
 require("dotenv").config();
 const path = require("path");
 
-
 const isLocal = false;
 
 const app = express();
@@ -18,7 +17,11 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://monitoring-task.vercel.app",
 ];
-const allowedIPs = [process.env.IP_ADDRESS, process.env.IP_ADDRESS2, process.env.IP_ADDRESS3];
+const allowedIPs = [
+  process.env.IP_ADDRESS,
+  process.env.IP_ADDRESS2,
+  process.env.IP_ADDRESS3,
+];
 
 const requestIp = require("request-ip");
 const IPAddress = require("./models/ipUsers.js");
@@ -41,19 +44,27 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   console.log("Incoming IP:", ip);
 
   try {
-    const data = await IPAddress.findOne({ });
-    //console.log("Database query result:", data);
-    const ipaddress = data.ip.map((ip) => ip);
+    const data = await IPAddress.findOne({});
 
-    //console.log("IP Address:", ipaddress);
+    const trackIp = await IPAddress.findOne({ track: ip });
+
+    if (!trackIp) {
+      IPAddress.create({ track: ip });
+    }
+    
+    if (!data) {
+      return res.status(403).send(" Access denied");
+    }
+
+    const ipaddress = data.ip;
     if (!ipaddress.includes(ip)) {
       return res.status(403).send("Access denied");
     }
-    
+
     next();
   } catch (err) {
     console.error("Error checking IP:", err);
@@ -99,7 +110,7 @@ app.get("/api/dataRoute/ipsz", (req, res) => {
 app.use(`/api/payments`, paymentRoutes);
 
 app.use(`/api/dataRoute`, dataRoute);
- 
+
 const connectDB = async (callback) => {
   try {
     isLocal
