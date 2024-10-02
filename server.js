@@ -42,9 +42,12 @@ app.use(
 
 app.use(async (req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log("Incoming IP:", ip);
 
   try {
-    const data = await ipUsers.findOne({ ip: { $in: [ip] } });
+    const data = await ipUsers.findOne({ ip: ip });
+    console.log("Database query result:", data);
+
     if (!data) {
       return res.status(403).send("Access denied");
     }
