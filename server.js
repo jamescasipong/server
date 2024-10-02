@@ -45,10 +45,10 @@ app.use(async (req, res, next) => {
   console.log("Incoming IP:", ip);
 
   try {
-    const data = await IPAddress.findOne({ ip: { $in: [ip] } });
-    console.log("Database query result:", data);
+    const data = await IPAddress.find({});
+    const ipAddress = data.map((item) => item.ip);
 
-    if (!data) {
+    if (!ipAddress.includes(ip)) {
       return res.status(403).send("Access denied");
     }
     next();
