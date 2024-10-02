@@ -4,4 +4,7 @@ const ipSchema = new mongoose.Schema({
     ip: String
 }, { collection: 'ipaddress' });
 
-module.exports = mongoose.model("ipaddress", ipSchema);
+const IPAddress = mongoose.model("ipaddress", ipSchema);
+
+module.exports = IPAddress;
+
