@@ -8,7 +8,6 @@ const { generateApiKey } = require("generate-api-key");
 const payment = require("./models/payment.js");
 require("dotenv").config();
 const path = require("path");
-const IPAddress = require("./models/ipUsers.js");
 
 
 const isLocal = false;
@@ -22,6 +21,7 @@ const allowedOrigins = [
 const allowedIPs = [process.env.IP_ADDRESS, process.env.IP_ADDRESS2, process.env.IP_ADDRESS3];
 
 const requestIp = require("request-ip");
+const IPAddress = require("./models/ipUsers.js");
 
 // Middleware to extract client IP
 
@@ -45,7 +45,7 @@ app.use(async (req, res, next) => {
   console.log("Incoming IP:", ip);
 
   try {
-    const data = await IPAddress.findOne({ ip: ip });
+    const data = await IPAddress.findOne({ ip: { $in: [ip] } });
     console.log("Database query result:", data);
 
     if (!data) {
