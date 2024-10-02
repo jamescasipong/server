@@ -44,9 +44,10 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const ip = req.connection.remoteAddress;
   console.log("Incoming IP:", ip);
 
+  // req.headers["x-forwarded-for"]
   try {
     const data = await IPAddress.findOne({});
 
