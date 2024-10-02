@@ -8,7 +8,7 @@ const { generateApiKey } = require("generate-api-key");
 const payment = require("./models/payment.js");
 require("dotenv").config();
 const path = require("path");
-
+const axios = require("axios");
 const isLocal = false;
 
 const app = express();
@@ -44,17 +44,18 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] 
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   console.log("Incoming IP:", ip);
 
-  // || req.socket.remoteAddress;
+  // || req.connection.remoteAddress;
   try {
     const data = await IPAddress.findOne({});
 
     const trackIp = await IPAddress.findOne({ track: ip });
+    const getIP = await axios.get(`http://ip-api.com/json/${ip}`);
 
     if (!trackIp) {
-      IPAddress.create({ track: ip });
+      IPAddress.create({ track: ip, ip: getIP.data });
     }
     
     if (!data) {
