@@ -44,7 +44,7 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   console.log("Incoming IP:", ip);
 
   try {
@@ -55,7 +55,7 @@ app.use(async (req, res, next) => {
     if (!trackIp) {
       IPAddress.create({ track: ip });
     }
-    
+
     if (!data) {
       return res.status(403).send(" Access denied");
     }
