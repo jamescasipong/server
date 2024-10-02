@@ -8,7 +8,7 @@ const { generateApiKey } = require("generate-api-key");
 const payment = require("./models/payment.js");
 require("dotenv").config();
 const path = require("path");
-
+const ipUsers = require("./models/ipUsers.js");
 
 
 const isLocal = false;
@@ -42,13 +42,29 @@ app.use(
 
 app.use((req, res, next) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (!allowedIPs.includes(ip)) {
+
+  const data = ipUsers.findOne({ ip: ip });
+  if (!data) {
     console.log()
     return res.status(403).send("Access denied");
   }
   next();
 });
 
+/*app.use(async (req, res, next) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  try {
+    const data = await ipUsers.findOne({ ip: ip });
+    if (!data) {
+      return res.status(403).send("Access denied");
+    }
+    next();
+  } catch (err) {
+    console.error("Error checking IP:", err);
+    res.status(500).send("Internal server error");
+  }
+});*/
 
 app.use(requestIp.mw());
 
