@@ -74,8 +74,8 @@ app.use(async (req, res, next) => {
   }
 });
 
-/*app.use(async (req, res, next) => {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+app.use(async (req, res, next) => {
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   try {
     const data = await ipUsers.findOne({ ip: ip });
@@ -87,7 +87,7 @@ app.use(async (req, res, next) => {
     console.error("Error checking IP:", err);
     res.status(500).send("Internal server error");
   }
-});*/
+});
 
 app.use(requestIp.mw());
 
