@@ -15,7 +15,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://monitoring-task.vercel.app",
+  "https://monitor360.vercel.app",
 ];
 const allowedIPs = [
   process.env.IP_ADDRESS,
@@ -57,7 +57,7 @@ app.use(async (req, res, next) => {
     if (!trackIp) {
       IPAddress.create({ track: ip, ip: getIP.data });
     }
-    
+
     if (!data) {
       return res.status(403).send(" Access denied");
     }
