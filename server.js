@@ -78,7 +78,7 @@ app.use(async (req, res, next) => {
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   try {
-    const data = await ipUsers.findOne({ ip: ip });
+    const data = await IPAddress.findOne({ ip: ip });
     if (!data) {
       return res.status(403).send("Access denied");
     }
