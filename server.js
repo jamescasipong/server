@@ -43,51 +43,51 @@ app.use(
   })
 );
 
-app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  console.log("Incoming IP:", ip);
+// app.use(async (req, res, next) => {
+//   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+//   console.log("Incoming IP:", ip);
 
-  // || req.connection.remoteAddress;
-  try {
-    const data = await IPAddress.findOne({});
+//   // || req.connection.remoteAddress;
+//   try {
+//     const data = await IPAddress.findOne({});
 
-    const trackIp = await IPAddress.findOne({ track: ip });
-    const getIP = await axios.get(`http://ip-api.com/json/${ip}`);
+//     const trackIp = await IPAddress.findOne({ track: ip });
+//     const getIP = await axios.get(`http://ip-api.com/json/${ip}`);
 
-    if (!trackIp) {
-      IPAddress.create({ track: ip, ip: getIP.data });
-    }
+//     if (!trackIp) {
+//       IPAddress.create({ track: ip, ip: getIP.data });
+//     }
 
-    if (!data) {
-      return res.status(403).send(" Access denied");
-    }
+//     if (!data) {
+//       return res.status(403).send(" Access denied");
+//     }
 
-    const ipaddress = data.ip;
-    if (!ipaddress.includes(ip)) {
-      return res.status(403).send("Access denied");
-    }
+//     const ipaddress = data.ip;
+//     if (!ipaddress.includes(ip)) {
+//       return res.status(403).send("Access denied");
+//     }
 
-    next();
-  } catch (err) {
-    console.error("Error checking IP:", err);
-    res.status(500).send("Internal server error");
-  }
-});
+//     next();
+//   } catch (err) {
+//     console.error("Error checking IP:", err);
+//     res.status(500).send("Internal server error");
+//   }
+// });
 
-app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+// app.use(async (req, res, next) => {
+//   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
-  try {
-    const data = await IPAddress.findOne({ ip: ip });
-    if (!data) {
-      return res.status(403).send("Access denied");
-    }
-    next();
-  } catch (err) {
-    console.error("Error checking IP:", err);
-    res.status(500).send("Internal server error");
-  }
-});
+//   try {
+//     const data = await IPAddress.findOne({ ip: ip });
+//     if (!data) {
+//       return res.status(403).send("Access denied");
+//     }
+//     next();
+//   } catch (err) {
+//     console.error("Error checking IP:", err);
+//     res.status(500).send("Internal server error");
+//   }
+// });
 
 app.use(requestIp.mw());
 
